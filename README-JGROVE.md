@@ -9,6 +9,8 @@
       ```
 
 ### Forked Repo: 
+    - forked on July 23, 2025
+    - last updated on July 23, 2025
     - https://github.com/grovejt/BMAD-METHOD
     - git pull https://github.com/grovejt/BMAD-METHOD.git
 
