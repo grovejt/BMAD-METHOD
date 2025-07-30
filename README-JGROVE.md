@@ -24,8 +24,13 @@
 ```shell
 git checkout main
 git fetch upstream
+
 # To see what commits are in the upstream that you don't have:
 git log HEAD..upstream/main --oneline
+git log HEAD..upstream/main --pretty=format:"%h - %an, %ar : %s"
+
+
+
 git pull upstream main
 git push origin main
 ```
