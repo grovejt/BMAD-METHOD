@@ -1,0 +1,273 @@
+template:
+  id: sequence-diagram-template-v1
+  name: Sequence Diagram Document
+  version: 1.0
+  output:
+    format: markdown
+    filename: docs/sequence-diagrams/{{use_case_slug}}.md
+    title: "{{use_case_name}} - Sequence Diagram"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+
+sections:
+  - id: introduction
+    title: Introduction
+    instruction: |
+      Provide a comprehensive overview of the use case being diagrammed.
+      Include the business context, user goals, and system objectives.
+    sections:
+      - id: use-case-overview
+        title: Use Case Overview
+        instruction: |
+          Describe the use case in business terms:
+          - What is the user trying to accomplish?
+          - What are the business goals and objectives?
+          - What are the success criteria?
+          - What are the key stakeholders involved?
+        template: |
+          **Use Case:** {{use_case_name}}
+          
+          **Primary Actor:** {{primary_actor}}
+          
+          **Business Goal:** {{business_goal}}
+          
+          **Success Criteria:** {{success_criteria}}
+          
+          **Stakeholders:** {{stakeholders}}
+      - id: scope-and-boundaries
+        title: Scope and Boundaries
+        instruction: |
+          Define what is included and excluded from this sequence diagram:
+          - What systems/components are in scope?
+          - What is considered out of scope?
+          - What are the entry and exit points?
+          - Are there any assumptions or constraints?
+        template: |
+          **In Scope:**
+          - {{in_scope_item_1}}
+          - {{in_scope_item_2}}
+          
+          **Out of Scope:**
+          - {{out_of_scope_item_1}}
+          - {{out_of_scope_item_2}}
+          
+          **Entry Point:** {{entry_point}}
+          
+          **Exit Point:** {{exit_point}}
+          
+          **Assumptions:** {{assumptions}}
+          
+          **Constraints:** {{constraints}}
+
+  - id: participants
+    title: Participants
+    instruction: |
+      Define all the components, systems, and actors that participate in this sequence.
+      Include both internal and external participants.
+    sections:
+      - id: participant-list
+        title: Participant Definitions
+        instruction: |
+          For each participant, provide:
+          - Name and type (user, system, service, database, etc.)
+          - Primary responsibility in this sequence
+          - Key interfaces or methods they expose
+          - Any relevant technical details
+        repeatable: true
+        template: |
+          **{{participant_name}}** ({{participant_type}})
+          
+          **Responsibility:** {{responsibility}}
+          
+          **Key Interfaces:** {{interfaces}}
+          
+          **Technical Details:** {{technical_details}}
+
+  - id: sequence-diagram
+    title: Sequence Diagram
+    type: mermaid
+    mermaid_type: sequenceDiagram
+    instruction: |
+      Create a comprehensive sequence diagram that shows:
+      - All interactions between participants
+      - Synchronous and asynchronous operations
+      - Error handling and alternative flows
+      - Timing considerations if relevant
+      - Clear message names and parameters
+      
+      Use proper Mermaid sequence diagram syntax:
+      - participant for each component
+      - -> for synchronous messages
+      - --> for responses
+      - ->> for asynchronous messages
+      - Note over for important annotations
+    template: |
+      ```mermaid
+      sequenceDiagram
+          participant {{participant_1}} as {{participant_1_name}}
+          participant {{participant_2}} as {{participant_2_name}}
+          participant {{participant_3}} as {{participant_3_name}}
+          
+          {{participant_1}}->>{{participant_2}}: {{message_1}}
+          Note over {{participant_1}},{{participant_2}}: {{note_1}}
+          {{participant_2}}->>{{participant_3}}: {{message_2}}
+          {{participant_3}}-->>{{participant_2}}: {{response_2}}
+          {{participant_2}}-->>{{participant_1}}: {{response_1}}
+      ```
+
+  - id: interaction-details
+    title: Interaction Details
+    instruction: |
+      Provide detailed explanations for each major interaction in the sequence.
+      Include business logic, data transformations, and decision points.
+    sections:
+      - id: interaction
+        title: "{{interaction_name}}"
+        repeatable: true
+        instruction: |
+          For each significant interaction, explain:
+          - What triggers this interaction
+          - What data is exchanged
+          - What business logic is applied
+          - What are the possible outcomes
+          - Any error conditions or edge cases
+        template: |
+          **Trigger:** {{trigger_condition}}
+          
+          **Data Exchanged:**
+          - Request: {{request_data}}
+          - Response: {{response_data}}
+          
+          **Business Logic:** {{business_logic}}
+          
+          **Outcomes:**
+          - Success: {{success_outcome}}
+          - Error: {{error_outcome}}
+          
+          **Edge Cases:** {{edge_cases}}
+
+  - id: error-handling
+    title: Error Handling
+    instruction: |
+      Document how errors and exceptional conditions are handled in this sequence.
+      Include retry logic, fallback mechanisms, and user feedback.
+    sections:
+      - id: error-scenarios
+        title: Error Scenarios
+        repeatable: true
+        instruction: |
+          For each potential error scenario:
+          - Describe the error condition
+          - Explain how it's detected
+          - Document the recovery mechanism
+          - Specify user impact and feedback
+        template: |
+          **Error Condition:** {{error_condition}}
+          
+          **Detection:** {{detection_method}}
+          
+          **Recovery:** {{recovery_mechanism}}
+          
+          **User Impact:** {{user_impact}}
+          
+          **User Feedback:** {{user_feedback}}
+
+  - id: performance-considerations
+    title: Performance Considerations
+    instruction: |
+      Document any performance implications, timing requirements, or optimization opportunities.
+    sections:
+      - id: timing-requirements
+        title: Timing Requirements
+        template: |
+          **Response Time Target:** {{response_time_target}}
+          
+          **Timeout Values:** {{timeout_values}}
+          
+          **Concurrency Considerations:** {{concurrency_considerations}}
+      - id: optimization-opportunities
+        title: Optimization Opportunities
+        template: |
+          **Caching Opportunities:** {{caching_opportunities}}
+          
+          **Parallel Processing:** {{parallel_processing}}
+          
+          **Resource Optimization:** {{resource_optimization}}
+
+  - id: security-considerations
+    title: Security Considerations
+    instruction: |
+      Document security aspects of this sequence, including authentication, authorization, and data protection.
+    sections:
+      - id: authentication
+        title: Authentication
+        template: |
+          **Authentication Method:** {{auth_method}}
+          
+          **Token Management:** {{token_management}}
+          
+          **Session Handling:** {{session_handling}}
+      - id: authorization
+        title: Authorization
+        template: |
+          **Access Control:** {{access_control}}
+          
+          **Permission Checks:** {{permission_checks}}
+          
+          **Data Access Rules:** {{data_access_rules}}
+      - id: data-protection
+        title: Data Protection
+        template: |
+          **Data Encryption:** {{data_encryption}}
+          
+          **PII Handling:** {{pii_handling}}
+          
+          **Audit Logging:** {{audit_logging}}
+
+  - id: integration-notes
+    title: Integration Notes
+    instruction: |
+      Document how this sequence integrates with the broader system architecture.
+      Include references to related components and documentation.
+    sections:
+      - id: architecture-integration
+        title: Architecture Integration
+        template: |
+          **Related Components:** {{related_components}}
+          
+          **Architecture Patterns:** {{architecture_patterns}}
+          
+          **Dependencies:** {{dependencies}}
+      - id: documentation-references
+        title: Documentation References
+        template: |
+          **Architecture Document:** {{architecture_doc_reference}}
+          
+          **API Documentation:** {{api_doc_reference}}
+          
+          **Related Use Cases:** {{related_use_cases}}
+
+  - id: changelog
+    title: Change Log
+    type: table
+    columns: [Date, Version, Description, Author]
+    instruction: Track document versions and changes
+
+  - id: next-steps
+    title: Next Steps
+    instruction: |
+      Document any follow-up actions, implementation considerations, or related work.
+    template: |
+      **Implementation Tasks:**
+      - {{implementation_task_1}}
+      - {{implementation_task_2}}
+      
+      **Testing Requirements:**
+      - {{testing_requirement_1}}
+      - {{testing_requirement_2}}
+      
+      **Related Work:**
+      - {{related_work_1}}
+      - {{related_work_2}} 
