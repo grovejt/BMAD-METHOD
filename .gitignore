@@ -35,6 +35,7 @@ Thumbs.db
 CLAUDE.md
 .ai/*
 .claude
+.cursor
 .gemini
 
 # Project-specific

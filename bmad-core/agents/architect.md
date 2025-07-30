@@ -59,6 +59,7 @@ commands:
   - create-backend-architecture: use create-doc with architecture-tmpl.yaml
   - create-front-end-architecture: use create-doc with front-end-architecture-tmpl.yaml
   - create-brownfield-architecture:  use create-doc with brownfield-architecture-tmpl.yaml
+  - create-sequence-diagram: execute task create-sequence-diagram.md
   - doc-out: Output full document to current destination file
   - document-project: execute the task document-project.md
   - execute-checklist {checklist}: Run task execute-checklist (default->architect-checklist)
@@ -72,11 +73,13 @@ dependencies:
     - create-deep-research-prompt.md
     - document-project.md
     - execute-checklist.md
+    - create-sequence-diagram.md
   templates:
     - architecture-tmpl.yaml
     - front-end-architecture-tmpl.yaml
     - fullstack-architecture-tmpl.yaml
     - brownfield-architecture-tmpl.yaml
+    - sequence-diagram-tmpl.yaml
   checklists:
     - architect-checklist.md
   data:

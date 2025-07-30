@@ -355,6 +355,7 @@ commands:
   - create-backend-architecture: use create-doc with architecture-tmpl.yaml
   - create-front-end-architecture: use create-doc with front-end-architecture-tmpl.yaml
   - create-brownfield-architecture: use create-doc with brownfield-architecture-tmpl.yaml
+  - create-sequence-diagram: execute task create-sequence-diagram.md
   - doc-out: Output full document to current destination file
   - document-project: execute the task document-project.md
   - execute-checklist {checklist}: Run task execute-checklist (default->architect-checklist)
@@ -368,11 +369,13 @@ dependencies:
     - create-deep-research-prompt.md
     - document-project.md
     - execute-checklist.md
+    - create-sequence-diagram.md
   templates:
     - architecture-tmpl.yaml
     - front-end-architecture-tmpl.yaml
     - fullstack-architecture-tmpl.yaml
     - brownfield-architecture-tmpl.yaml
+    - sequence-diagram-tmpl.yaml
   checklists:
     - architect-checklist.md
   data:
@@ -5233,6 +5236,110 @@ Keep it action-oriented and forward-looking.]]
 None Listed
 ==================== END: .bmad-core/data/technical-preferences.md ====================
 
+==================== START: .bmad-core/tasks/create-sequence-diagram.md ====================
+# Create Sequence Diagram
+
+## Purpose
+Create detailed sequence diagrams for specific use cases to visualize system interactions and component relationships.
+
+## When to Use
+- During architecture design to clarify component interactions
+- When implementing complex workflows that span multiple services
+- To document API interactions and data flow
+- For troubleshooting complex system behaviors
+- When onboarding new team members to system architecture
+
+## Prerequisites
+- Project architecture document (docs/architecture.md)
+- Clear understanding of the use case to be diagrammed
+- Component definitions and API specifications
+
+## Workflow
+
+### Step 1: Use Case Analysis
+1. **Identify the Use Case**
+   - Review the user's description of the sequence to be diagrammed
+   - Clarify the scope and boundaries of the interaction
+   - Identify the primary actor(s) and system components involved
+
+2. **Gather Context**
+   - Review existing architecture documentation
+   - Identify relevant components, services, and APIs
+   - Understand data flow and business logic requirements
+
+3. **Define Interaction Scope**
+   - Determine the start and end points of the sequence
+   - Identify all participating components/systems
+   - Clarify any external dependencies or integrations
+
+### Step 2: Component Identification
+1. **List All Participants**
+   - Primary actors (users, external systems)
+   - Internal system components
+   - External services and APIs
+   - Data stores and message queues
+
+2. **Define Component Responsibilities**
+   - Clarify what each component does in the sequence
+   - Identify the interfaces and methods being called
+   - Document any state changes or side effects
+
+### Step 3: Sequence Flow Design
+1. **Map the Interaction Flow**
+   - Define the chronological order of interactions
+   - Identify synchronous vs asynchronous operations
+   - Document error handling and alternative flows
+   - Include timing considerations if relevant
+
+2. **Handle Edge Cases**
+   - Consider failure scenarios and recovery
+   - Document retry logic and circuit breakers
+   - Include timeout and error response handling
+
+### Step 4: Diagram Creation
+1. **Create Mermaid Sequence Diagram**
+   - Use the sequence-diagram-tmpl.yaml template
+   - Follow Mermaid sequence diagram syntax
+   - Include all identified participants and interactions
+   - Add appropriate notes and comments
+
+2. **Validate the Diagram**
+   - Ensure all interactions are properly represented
+   - Verify component names match architecture documentation
+   - Check that the flow is logical and complete
+
+### Step 5: Documentation
+1. **Add Context and Notes**
+   - Provide a clear description of the use case
+   - Document any assumptions or constraints
+   - Include relevant business rules or requirements
+   - Add references to related documentation
+
+2. **Integration with Architecture**
+   - Update architecture document if new insights are discovered
+   - Link the sequence diagram to relevant components
+   - Ensure consistency with existing documentation
+
+## Output
+- Mermaid sequence diagram in markdown format
+- Detailed description of the use case and interactions
+- Integration notes for architecture documentation
+- Any discovered architectural improvements or concerns
+
+## Quality Checklist
+- [ ] All relevant components are included
+- [ ] Interaction flow is logical and complete
+- [ ] Error handling and edge cases are considered
+- [ ] Component names match architecture documentation
+- [ ] Diagram syntax is valid and renders correctly
+- [ ] Context and assumptions are clearly documented
+- [ ] Integration with existing documentation is complete
+
+## Example Usage
+
+create-sequence-diagram "User login flow including OAuth integration and session management"
+==================== END: .bmad-core/tasks/create-sequence-diagram.md ====================
+
 ==================== START: .bmad-core/templates/architecture-tmpl.yaml ====================
 template:
   id: architecture-template-v2
@@ -7381,6 +7488,282 @@ sections:
           - Existing system compatibility requirements with specific verification steps
           - Clear sequencing of implementation to minimize risk to existing functionality
 ==================== END: .bmad-core/templates/brownfield-architecture-tmpl.yaml ====================
+
+==================== START: .bmad-core/templates/sequence-diagram-tmpl.yaml ====================
+template:
+  id: sequence-diagram-template-v1
+  name: Sequence Diagram Document
+  version: 1.0
+  output:
+    format: markdown
+    filename: docs/sequence-diagrams/{{use_case_slug}}.md
+    title: "{{use_case_name}} - Sequence Diagram"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+
+sections:
+  - id: introduction
+    title: Introduction
+    instruction: |
+      Provide a comprehensive overview of the use case being diagrammed.
+      Include the business context, user goals, and system objectives.
+    sections:
+      - id: use-case-overview
+        title: Use Case Overview
+        instruction: |
+          Describe the use case in business terms:
+          - What is the user trying to accomplish?
+          - What are the business goals and objectives?
+          - What are the success criteria?
+          - What are the key stakeholders involved?
+        template: |
+          **Use Case:** {{use_case_name}}
+          
+          **Primary Actor:** {{primary_actor}}
+          
+          **Business Goal:** {{business_goal}}
+          
+          **Success Criteria:** {{success_criteria}}
+          
+          **Stakeholders:** {{stakeholders}}
+      - id: scope-and-boundaries
+        title: Scope and Boundaries
+        instruction: |
+          Define what is included and excluded from this sequence diagram:
+          - What systems/components are in scope?
+          - What is considered out of scope?
+          - What are the entry and exit points?
+          - Are there any assumptions or constraints?
+        template: |
+          **In Scope:**
+          - {{in_scope_item_1}}
+          - {{in_scope_item_2}}
+          
+          **Out of Scope:**
+          - {{out_of_scope_item_1}}
+          - {{out_of_scope_item_2}}
+          
+          **Entry Point:** {{entry_point}}
+          
+          **Exit Point:** {{exit_point}}
+          
+          **Assumptions:** {{assumptions}}
+          
+          **Constraints:** {{constraints}}
+
+  - id: participants
+    title: Participants
+    instruction: |
+      Define all the components, systems, and actors that participate in this sequence.
+      Include both internal and external participants.
+    sections:
+      - id: participant-list
+        title: Participant Definitions
+        instruction: |
+          For each participant, provide:
+          - Name and type (user, system, service, database, etc.)
+          - Primary responsibility in this sequence
+          - Key interfaces or methods they expose
+          - Any relevant technical details
+        repeatable: true
+        template: |
+          **{{participant_name}}** ({{participant_type}})
+          
+          **Responsibility:** {{responsibility}}
+          
+          **Key Interfaces:** {{interfaces}}
+          
+          **Technical Details:** {{technical_details}}
+
+  - id: sequence-diagram
+    title: Sequence Diagram
+    type: mermaid
+    mermaid_type: sequenceDiagram
+    instruction: |
+      Create a comprehensive sequence diagram that shows:
+      - All interactions between participants
+      - Synchronous and asynchronous operations
+      - Error handling and alternative flows
+      - Timing considerations if relevant
+      - Clear message names and parameters
+      
+      Use proper Mermaid sequence diagram syntax:
+      - participant for each component
+      - -> for synchronous messages
+      - --> for responses
+      - ->> for asynchronous messages
+      - Note over for important annotations
+    template: |
+      ```mermaid
+      sequenceDiagram
+          participant {{participant_1}} as {{participant_1_name}}
+          participant {{participant_2}} as {{participant_2_name}}
+          participant {{participant_3}} as {{participant_3_name}}
+          
+          {{participant_1}}->>{{participant_2}}: {{message_1}}
+          Note over {{participant_1}},{{participant_2}}: {{note_1}}
+          {{participant_2}}->>{{participant_3}}: {{message_2}}
+          {{participant_3}}-->>{{participant_2}}: {{response_2}}
+          {{participant_2}}-->>{{participant_1}}: {{response_1}}
+      ```
+
+  - id: interaction-details
+    title: Interaction Details
+    instruction: |
+      Provide detailed explanations for each major interaction in the sequence.
+      Include business logic, data transformations, and decision points.
+    sections:
+      - id: interaction
+        title: "{{interaction_name}}"
+        repeatable: true
+        instruction: |
+          For each significant interaction, explain:
+          - What triggers this interaction
+          - What data is exchanged
+          - What business logic is applied
+          - What are the possible outcomes
+          - Any error conditions or edge cases
+        template: |
+          **Trigger:** {{trigger_condition}}
+          
+          **Data Exchanged:**
+          - Request: {{request_data}}
+          - Response: {{response_data}}
+          
+          **Business Logic:** {{business_logic}}
+          
+          **Outcomes:**
+          - Success: {{success_outcome}}
+          - Error: {{error_outcome}}
+          
+          **Edge Cases:** {{edge_cases}}
+
+  - id: error-handling
+    title: Error Handling
+    instruction: |
+      Document how errors and exceptional conditions are handled in this sequence.
+      Include retry logic, fallback mechanisms, and user feedback.
+    sections:
+      - id: error-scenarios
+        title: Error Scenarios
+        repeatable: true
+        instruction: |
+          For each potential error scenario:
+          - Describe the error condition
+          - Explain how it's detected
+          - Document the recovery mechanism
+          - Specify user impact and feedback
+        template: |
+          **Error Condition:** {{error_condition}}
+          
+          **Detection:** {{detection_method}}
+          
+          **Recovery:** {{recovery_mechanism}}
+          
+          **User Impact:** {{user_impact}}
+          
+          **User Feedback:** {{user_feedback}}
+
+  - id: performance-considerations
+    title: Performance Considerations
+    instruction: |
+      Document any performance implications, timing requirements, or optimization opportunities.
+    sections:
+      - id: timing-requirements
+        title: Timing Requirements
+        template: |
+          **Response Time Target:** {{response_time_target}}
+          
+          **Timeout Values:** {{timeout_values}}
+          
+          **Concurrency Considerations:** {{concurrency_considerations}}
+      - id: optimization-opportunities
+        title: Optimization Opportunities
+        template: |
+          **Caching Opportunities:** {{caching_opportunities}}
+          
+          **Parallel Processing:** {{parallel_processing}}
+          
+          **Resource Optimization:** {{resource_optimization}}
+
+  - id: security-considerations
+    title: Security Considerations
+    instruction: |
+      Document security aspects of this sequence, including authentication, authorization, and data protection.
+    sections:
+      - id: authentication
+        title: Authentication
+        template: |
+          **Authentication Method:** {{auth_method}}
+          
+          **Token Management:** {{token_management}}
+          
+          **Session Handling:** {{session_handling}}
+      - id: authorization
+        title: Authorization
+        template: |
+          **Access Control:** {{access_control}}
+          
+          **Permission Checks:** {{permission_checks}}
+          
+          **Data Access Rules:** {{data_access_rules}}
+      - id: data-protection
+        title: Data Protection
+        template: |
+          **Data Encryption:** {{data_encryption}}
+          
+          **PII Handling:** {{pii_handling}}
+          
+          **Audit Logging:** {{audit_logging}}
+
+  - id: integration-notes
+    title: Integration Notes
+    instruction: |
+      Document how this sequence integrates with the broader system architecture.
+      Include references to related components and documentation.
+    sections:
+      - id: architecture-integration
+        title: Architecture Integration
+        template: |
+          **Related Components:** {{related_components}}
+          
+          **Architecture Patterns:** {{architecture_patterns}}
+          
+          **Dependencies:** {{dependencies}}
+      - id: documentation-references
+        title: Documentation References
+        template: |
+          **Architecture Document:** {{architecture_doc_reference}}
+          
+          **API Documentation:** {{api_doc_reference}}
+          
+          **Related Use Cases:** {{related_use_cases}}
+
+  - id: changelog
+    title: Change Log
+    type: table
+    columns: [Date, Version, Description, Author]
+    instruction: Track document versions and changes
+
+  - id: next-steps
+    title: Next Steps
+    instruction: |
+      Document any follow-up actions, implementation considerations, or related work.
+    template: |
+      **Implementation Tasks:**
+      - {{implementation_task_1}}
+      - {{implementation_task_2}}
+      
+      **Testing Requirements:**
+      - {{testing_requirement_1}}
+      - {{testing_requirement_2}}
+      
+      **Related Work:**
+      - {{related_work_1}}
+      - {{related_work_2}}
+==================== END: .bmad-core/templates/sequence-diagram-tmpl.yaml ====================
 
 ==================== START: .bmad-core/checklists/architect-checklist.md ====================
 # Architect Solution Validation Checklist
