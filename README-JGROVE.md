@@ -29,13 +29,29 @@ git fetch upstream
 git log HEAD..upstream/main --oneline
 git log HEAD..upstream/main --pretty=format:"%h - %an, %ar : %s"
 
+# See detailed differences between your main and upstream/main
+git diff upstream/main
+#See just the file names that have changed
+git diff --name-only upstream/main
+# See a summary of changes with stats
+git diff --stat upstream/main
 
+# Preview the merge (what would happen if you merged)
+git merge-tree $(git merge-base main upstream/main) main upstream/main
 
+# See a visual representation of the branch differences
+git log --graph --oneline --decorate main upstream/main
+
+# Pull the changes from upstream/main into your local main branch
 git pull upstream main
 git push origin main
 ```
-
-
+# Syncing main to feature/enhance-architect-to-create-sequence-diagrams
+```shell
+git checkout feature/enhance-architect-to-create-sequence-diagrams
+git merge main
+git push origin feature/enhance-architect-to-create-sequence-diagrams
+```
 
 
 
