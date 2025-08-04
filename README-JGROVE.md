@@ -54,7 +54,9 @@ git push origin feature/enhance-architect-to-create-sequence-diagrams
 ```
 
 
-
+# Installing/Updating BMad-Method to the latest version in a project:
+```shell
+npx bmad-method install
 
 
 
